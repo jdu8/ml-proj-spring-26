@@ -1,0 +1,18 @@
+{
+  "1024": {
+    "avg_seq_len": 753.511,
+    "coverage_pct": 48.58
+  },
+  "2048": {
+    "avg_seq_len": 760.9818,
+    "coverage_pct": 59.48
+  },
+  "4096": {
+    "avg_seq_len": 764.0978,
+    "coverage_pct": 80.88
+  },
+  "8192": {
+    "avg_seq_len": 765.2066,
+    "coverage_pct": 100.0
+  }
+}

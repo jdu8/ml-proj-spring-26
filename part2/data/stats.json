@@ -1,0 +1,14 @@
+{
+  "train": {
+    "tokens": 105051506,
+    "size_mb": 210.1
+  },
+  "val": {
+    "tokens": 1072792,
+    "size_mb": 2.1
+  },
+  "test": {
+    "tokens": 1067911,
+    "size_mb": 2.1
+  }
+}

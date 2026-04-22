@@ -1,0 +1,12 @@
+{
+  "vocab_size": 4096,
+  "max_tokens": 1024,
+  "seed": 42,
+  "train_ratio": 0.98,
+  "n_train": 224150,
+  "n_val": 2287,
+  "n_test": 2288,
+  "train_tokens": 104827356,
+  "val_tokens": 1070505,
+  "test_tokens": 1065623
+}

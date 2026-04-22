@@ -1,0 +1,50 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# ── Environments ──────────────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+
+# ── Part 1: large data files ──────────────────────────────────────────────────
+# Raw downloads and cleaned SVGs (several GB)
+part1/data/raw/
+part1/data/cleaned/
+
+# JSONL splits (train is 200 MB)
+part1/data/splits/train.jsonl
+part1/data/splits/val.jsonl
+part1/data/splits/test.jsonl
+
+# BPE training corpus (361 MB) — tokenizer JSON files are kept (< 1 MB each)
+part1/tokenizer/corpus.txt
+
+# ── Part 2: binary training data and model weights ────────────────────────────
+# Binary token arrays (210 MB) — upload separately to Google Drive
+part2/data/*.bin
+
+# Model checkpoints (up to ~350 MB for XL)
+part2/out/**/ckpt.pt
+
+# Keep results.json, log.csv, sweep_summary.json (small, useful for report)
+!part2/out/**/results.json
+!part2/out/**/log.csv
+!part2/out/**/sweep_summary.json
+!part2/out/**/scaling_fit*.json
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+svg_data.zip

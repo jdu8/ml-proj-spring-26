@@ -1,0 +1,38 @@
+{
+  "1024": {
+    "vocab_size": 1024,
+    "avg_seq_len": 780.4092,
+    "median_seq_len": 557,
+    "pct_no_unk": 100.0,
+    "pct_over_1024": 24.94,
+    "estimated_total_tokens": 223598941.93800002,
+    "estimated_train_tokens": 219126963.09924
+  },
+  "2048": {
+    "vocab_size": 2048,
+    "avg_seq_len": 770.6498,
+    "median_seq_len": 551,
+    "pct_no_unk": 100.0,
+    "pct_over_1024": 24.34,
+    "estimated_total_tokens": 220802727.447,
+    "estimated_train_tokens": 216386672.89806
+  },
+  "4096": {
+    "vocab_size": 4096,
+    "avg_seq_len": 766.47,
+    "median_seq_len": 548,
+    "pct_no_unk": 100.0,
+    "pct_over_1024": 24.099999999999998,
+    "estimated_total_tokens": 219605152.05,
+    "estimated_train_tokens": 215213049.009
+  },
+  "8192": {
+    "vocab_size": 8192,
+    "avg_seq_len": 765.2066,
+    "median_seq_len": 546,
+    "pct_no_unk": 100.0,
+    "pct_over_1024": 24.099999999999998,
+    "estimated_total_tokens": 219243168.99899998,
+    "estimated_train_tokens": 214858305.61902
+  }
+}
