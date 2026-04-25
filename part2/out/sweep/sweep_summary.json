@@ -1,0 +1,36 @@
+{
+  "config": "tiny",
+  "results": [
+    {
+      "lr": 0.003,
+      "val_loss": 1.2653197717666627,
+      "run_dir": "out/sweep/lr_3e-3"
+    },
+    {
+      "lr": 0.01,
+      "val_loss": 1.3481436276435852,
+      "run_dir": "out/sweep/lr_1e-2"
+    },
+    {
+      "lr": 0.001,
+      "val_loss": 1.5131625175476073,
+      "run_dir": "out/sweep/lr_1e-3"
+    },
+    {
+      "lr": 0.03,
+      "val_loss": 1.7303748798370362,
+      "run_dir": "out/sweep/lr_3e-2"
+    },
+    {
+      "lr": 0.0003,
+      "val_loss": 1.8844806718826295,
+      "run_dir": "out/sweep/lr_3e-4"
+    },
+    {
+      "lr": 0.0001,
+      "val_loss": 2.716676459312439,
+      "run_dir": "out/sweep/lr_1e-4"
+    }
+  ],
+  "best_lr": 0.003
+}

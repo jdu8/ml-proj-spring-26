@@ -1,0 +1,10 @@
+{
+  "config": "small",
+  "n_params": 3443136,
+  "lr": 0.003,
+  "best_val_loss": 1.11141410112381,
+  "final_train_loss": 1.1080474555492401,
+  "total_steps": 801,
+  "effective_batch_tokens": 131072,
+  "wall_time_s": 600.8
+}
