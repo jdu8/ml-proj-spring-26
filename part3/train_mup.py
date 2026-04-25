@@ -1,11 +1,11 @@
 """
 Train a µP GPT model for exactly 1 epoch.
 
-Run make_base_shapes.py once first, then:
     python train_mup.py --config tiny  --lr 3e-3 --out_dir out/tiny
     python train_mup.py --config xl    --lr 3e-3 --out_dir out/xl
 
 The SAME --lr transfers across all model sizes — that is the µP guarantee.
+No pre-generated base_shapes.bsh needed; base shapes are built inline per model.
 """
 import argparse
 import csv
@@ -24,8 +24,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "part2"))
 from configs import get_config
 
 from model_mup import GPTMuP, GPTConfig
-
-BASE_SHAPES = Path(__file__).parent / "base_shapes.bsh"
 
 
 # ── CLI ────────────────────────────────────────────────────────────────────────
@@ -46,10 +44,36 @@ def parse_args():
     p.add_argument("--eval_batches", type=int,   default=50)
     p.add_argument("--out_dir",      default="out/tiny")
     p.add_argument("--data_dir",     default="../part2/data")
-    p.add_argument("--base_shapes",  default=str(BASE_SHAPES))
     p.add_argument("--seed",         type=int,   default=42)
     p.add_argument("--compile",      action="store_true")
     return p.parse_args()
+
+
+# ── µP BASE SHAPES ─────────────────────────────────────────────────────────────
+
+def make_mup_base_shapes(gpt_cfg: GPTConfig):
+    """
+    Build base + delta models with the SAME depth (n_layer) as the target but
+    smaller width, so parameter names match exactly.
+
+    base  width = n_head × 8   (head_dim=8, a small reference)
+    delta width = n_head × 16  (2× base, tells mup which dims scale with width)
+    """
+    def _build(n_embd):
+        cfg = GPTConfig(
+            vocab_size=gpt_cfg.vocab_size,
+            block_size=gpt_cfg.block_size,
+            n_layer=gpt_cfg.n_layer,       # must match target depth exactly
+            n_head=gpt_cfg.n_head,
+            n_embd=n_embd,
+            n_ff=n_embd * 4,
+            bias=gpt_cfg.bias,
+        )
+        return GPTMuP(cfg)
+
+    base_embd  = gpt_cfg.n_head * 8   # e.g. tiny→32, small→48, xl→96
+    delta_embd = gpt_cfg.n_head * 16
+    return _build(base_embd), _build(delta_embd)
 
 
 # ── LR SCHEDULE ────────────────────────────────────────────────────────────────
@@ -118,14 +142,10 @@ def main():
     )
     model = GPTMuP(gpt_cfg)
 
-    # µP: annotate params with infshape BEFORE weight init
-    if not Path(args.base_shapes).exists():
-        raise FileNotFoundError(
-            f"base_shapes.bsh not found at {args.base_shapes}. "
-            "Run: python make_base_shapes.py"
-        )
-    set_base_shapes(model, args.base_shapes)
-    model.init_weights()          # mup-aware init (after set_base_shapes)
+    # µP: build same-depth base+delta inline, annotate params BEFORE weight init
+    base_model, delta_model = make_mup_base_shapes(gpt_cfg)
+    set_base_shapes(model, base_model, delta=delta_model)
+    model.init_weights()          # mup-aware init (must come after set_base_shapes)
     model = model.to(device)
 
     n_params = model.count_params()
