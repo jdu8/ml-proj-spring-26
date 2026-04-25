@@ -33,8 +33,8 @@ def parse_args():
     p.add_argument("--config",       default="tiny",   help="Model size: tiny/small/medium/large/xl")
     p.add_argument("--lr",           type=float, default=3e-4)
     p.add_argument("--min_lr_frac",  type=float, default=0.1,  help="min_lr = lr * min_lr_frac")
-    p.add_argument("--batch_size",   type=int,   default=8,    help="Micro-batch size (sequences per step)")
-    p.add_argument("--grad_accum",   type=int,   default=16,   help="Gradient accumulation steps")
+    p.add_argument("--batch_size",   type=int,   default=32,   help="Micro-batch size (sequences per step)")
+    p.add_argument("--grad_accum",   type=int,   default=4,    help="Gradient accumulation steps")
     p.add_argument("--weight_decay", type=float, default=0.1)
     p.add_argument("--beta1",        type=float, default=0.9)
     p.add_argument("--beta2",        type=float, default=0.95)
@@ -117,7 +117,19 @@ def main():
     )
     model = GPT(gpt_cfg).to(device)
     n_params = model.count_params()
-    print(f"Config: {args.config}  |  Params (non-emb): {n_params / 1e6:.2f}M")
+    n_params_total = model.count_params(non_embedding=False)
+
+    print(f"\n{'─'*55}")
+    print(f"  Model : {args.config}")
+    print(f"  d_model={gpt_cfg.n_embd}  n_layers={gpt_cfg.n_layer}  "
+          f"n_heads={gpt_cfg.n_head}  d_ff={gpt_cfg.n_ff}")
+    print(f"  vocab={gpt_cfg.vocab_size}  block_size={gpt_cfg.block_size}")
+    print(f"  Params (non-emb) : {n_params/1e6:.3f}M")
+    print(f"  Params (total)   : {n_params_total/1e6:.3f}M")
+    if torch.cuda.is_available():
+        print(f"  GPU              : {torch.cuda.get_device_name(0)}")
+        print(f"  VRAM total       : {torch.cuda.get_device_properties(0).total_memory/1e9:.1f} GB")
+    print(f"{'─'*55}\n")
 
     if args.compile:
         try:
@@ -160,7 +172,7 @@ def main():
 
     # ── AMP ────────────────────────────────────────────────────────────────────
     use_amp = device_type == "cuda"
-    scaler  = torch.cuda.amp.GradScaler(enabled=use_amp)
+    scaler  = torch.amp.GradScaler("cuda", enabled=use_amp)
 
     # ── training loop ──────────────────────────────────────────────────────────
     best_val_loss = float("inf")
@@ -181,7 +193,7 @@ def main():
         for _ in range(args.grad_accum):
             x, y = get_batch(train_data, train_pos, args.batch_size, block_size, device)
             train_pos += tokens_per_microstep
-            with torch.cuda.amp.autocast(enabled=use_amp):
+            with torch.amp.autocast(device_type=device_type, enabled=use_amp):
                 _, loss = model(x, y)
             loss = loss / args.grad_accum
             scaler.scale(loss).backward()

@@ -24,8 +24,8 @@ def parse_args():
     p.add_argument("--config",     default="tiny")
     p.add_argument("--out_dir",    default="out/sweep")
     p.add_argument("--data_dir",   default="data")
-    p.add_argument("--batch_size", type=int, default=8)
-    p.add_argument("--grad_accum", type=int, default=16)
+    p.add_argument("--batch_size", type=int, default=32)
+    p.add_argument("--grad_accum", type=int, default=4)
     p.add_argument("--lrs",        nargs="+", type=float, default=DEFAULT_LRS)
     return p.parse_args()
 
