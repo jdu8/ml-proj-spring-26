@@ -2,9 +2,9 @@
   "config": "medium",
   "n_params": 12194688,
   "lr": 0.003,
-  "best_val_loss": 0.9804924261569977,
-  "final_train_loss": 0.9829442352056503,
+  "best_val_loss": 0.9876876533031463,
+  "final_train_loss": 0.9888422787189484,
   "total_steps": 801,
   "effective_batch_tokens": 131072,
-  "wall_time_s": 1221.4
+  "wall_time_s": 161.4
 }

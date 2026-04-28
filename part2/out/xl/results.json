@@ -2,9 +2,9 @@
   "config": "xl",
   "n_params": 88099584,
   "lr": 0.003,
-  "best_val_loss": 2.190852236747742,
-  "final_train_loss": 2.1330580711364746,
+  "best_val_loss": 2.063141269683838,
+  "final_train_loss": 2.0094244480133057,
   "total_steps": 801,
   "effective_batch_tokens": 131072,
-  "wall_time_s": 5581.5
+  "wall_time_s": 763.8
 }

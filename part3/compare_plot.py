@@ -14,16 +14,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
-CONFIGS = ["tiny", "small", "medium", "large", "xl"]
+SERIES = {
+    "original": ["tiny", "small", "medium", "large", "xl"],
+    "wide":     ["tiny", "small_wide", "medium_wide", "large_wide", "xl_wide"],
+}
 
 
 def power_law(N, a, alpha, c):
     return a * N ** (-alpha) + c
 
 
-def load_results(results_dir: Path, label: str) -> list[dict]:
+def load_results(results_dir: Path, label: str, configs: list) -> list[dict]:
     points = []
-    for name in CONFIGS:
+    for name in configs:
         p = results_dir / name / "results.json"
         if p.exists():
             with open(p) as f:
@@ -57,10 +60,13 @@ def main():
     p.add_argument("--sp_dir",    default="../part2/out")
     p.add_argument("--mup_dir",   default="out")
     p.add_argument("--plot_path", default="plots/compare.png")
+    p.add_argument("--series",    default="wide", choices=["original", "wide"],
+                   help="Model series to compare (default: wide — the µP-clean series)")
     args = p.parse_args()
 
-    sp_points  = load_results(Path(args.sp_dir),  "SP")
-    mup_points = load_results(Path(args.mup_dir), "µP")
+    configs    = SERIES[args.series]
+    sp_points  = load_results(Path(args.sp_dir),  "SP",  configs)
+    mup_points = load_results(Path(args.mup_dir), "µP",  configs)
 
     if not sp_points and not mup_points:
         print("No results found. Train models first.")

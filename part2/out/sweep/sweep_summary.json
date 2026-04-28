@@ -3,32 +3,32 @@
   "results": [
     {
       "lr": 0.003,
-      "val_loss": 1.2653197717666627,
+      "val_loss": 1.268328092098236,
       "run_dir": "out/sweep/lr_3e-3"
     },
     {
       "lr": 0.01,
-      "val_loss": 1.3481436276435852,
+      "val_loss": 1.3320255947113038,
       "run_dir": "out/sweep/lr_1e-2"
     },
     {
       "lr": 0.001,
-      "val_loss": 1.5131625175476073,
+      "val_loss": 1.5145070195198058,
       "run_dir": "out/sweep/lr_1e-3"
     },
     {
-      "lr": 0.03,
-      "val_loss": 1.7303748798370362,
-      "run_dir": "out/sweep/lr_3e-2"
-    },
-    {
       "lr": 0.0003,
-      "val_loss": 1.8844806718826295,
+      "val_loss": 1.8812091040611267,
       "run_dir": "out/sweep/lr_3e-4"
     },
     {
+      "lr": 0.03,
+      "val_loss": 1.976784884929657,
+      "run_dir": "out/sweep/lr_3e-2"
+    },
+    {
       "lr": 0.0001,
-      "val_loss": 2.716676459312439,
+      "val_loss": 2.7172265672683715,
       "run_dir": "out/sweep/lr_1e-4"
     }
   ],

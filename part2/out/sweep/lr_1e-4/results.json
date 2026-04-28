@@ -2,9 +2,9 @@
   "config": "tiny",
   "n_params": 1311872,
   "lr": 0.0001,
-  "best_val_loss": 2.716676459312439,
-  "final_train_loss": 2.64866042137146,
+  "best_val_loss": 2.7172265672683715,
+  "final_train_loss": 2.649157702922821,
   "total_steps": 801,
   "effective_batch_tokens": 131072,
-  "wall_time_s": 289.8
+  "wall_time_s": 53.7
 }

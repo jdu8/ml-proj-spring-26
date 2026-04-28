@@ -1,0 +1,10 @@
+{
+  "config": "medium_wide",
+  "n_params": 8654208,
+  "lr": 0.003,
+  "best_val_loss": 0.9942834866046906,
+  "final_train_loss": 0.9964236319065094,
+  "total_steps": 801,
+  "effective_batch_tokens": 131072,
+  "wall_time_s": 116.2
+}

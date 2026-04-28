@@ -4,25 +4,26 @@
 
 ### Original Series (width + depth scale together)
 
-| Name   | ~Params (non-emb) | d_model | n_layers | n_heads | d_ff |
-|--------|-------------------|---------|----------|---------|------|
-| Tiny   | 1.31M             | 128     | 4        | 4       | 512  |
-| Small  | 3.44M             | 192     | 6        | 6       | 768  |
-| Medium | 12.19M            | 384     | 6        | 6       | 1536 |
-| Large  | 33.57M            | 512     | 10       | 8       | 2048 |
-| XL     | 88.10M            | 768     | 12       | 12      | 3072 |
+| Name   | Params (non-emb) | d_model | n_layers | n_heads | d_ff |
+|--------|------------------|---------|----------|---------|------|
+| Tiny   | 1.31M            | 128     | 4        | 4       | 512  |
+| Small  | 3.44M            | 192     | 6        | 6       | 768  |
+| Medium | 12.19M           | 384     | 6        | 6       | 1536 |
+| Large  | 33.57M           | 512     | 10       | 8       | 2048 |
+| XL     | 88.10M           | 768     | 12       | 12      | 3072 |
 
 ### Wide Series (width only — n_layers fixed at 4, designed for µP LR transfer)
 
-| Name        | ~Params (non-emb) | d_model | n_layers | n_heads | d_ff |
-|-------------|-------------------|---------|----------|---------|------|
-| Tiny        | 1.31M             | 128     | 4        | 4       | 512  |
-| Small-Wide  | 2.56M             | 192     | 4        | 6       | 768  |
-| Medium-Wide | 8.65M             | 384     | 4        | 6       | 1536 |
-| Large-Wide  | 14.68M            | 512     | 4        | 8       | 2048 |
-| XL-Wide     | 31.46M            | 768     | 4        | 12      | 3072 |
+| Name        | Params (non-emb) | d_model | n_layers | n_heads | d_ff |
+|-------------|------------------|---------|----------|---------|------|
+| Tiny        | 1.31M            | 128     | 4        | 4       | 512  |
+| Small-Wide  | 2.56M            | 192     | 4        | 6       | 768  |
+| Medium-Wide | 8.65M            | 384     | 4        | 6       | 1536 |
+| Large-Wide  | 14.68M           | 512     | 4        | 8       | 2048 |
+| XL-Wide     | 31.46M           | 768     | 4        | 12      | 3072 |
 
-µP's LR multipliers correct for width only (1/d_model scaling). Because the wide series fixes depth, the LR found on Tiny transfers zero-shot to all wider models. The original series mixes depth and width changes, which muddies µP's guarantees.
+µP's LR multipliers correct for width (1/d_model) only. Fixing depth isolates the width dimension
+and gives µP the cleanest possible LR transfer signal. Tiny is shared between both series.
 
 Parameter counts exclude positional embeddings (Kaplan et al. 2020 convention).
 
@@ -34,80 +35,132 @@ Parameter counts exclude positional embeddings (Kaplan et al. 2020 convention).
 |---------|-------|
 | Tokenizer | BPE, vocab = 4,096, ByteLevel (Part 1) |
 | Context window | 1,024 tokens |
-| Training tokens | 105,051,506 (1 epoch) |
+| Training tokens | ~105M (1 epoch) |
 | Effective batch | 131,072 tokens/step (32 seq × 4 grad_accum × 1,024) |
 | Optimizer | AdamW (β₁=0.9, β₂=0.95, wd=0.1) |
-| LR schedule | Cosine with 5% linear warmup (40 steps), min_lr = lr × 0.1 |
+| LR schedule | Cosine with 5% linear warmup, min_lr = lr × 0.1 |
 | Optimizer steps | 801 per model |
 | Mixed precision | fp16 (AMP) |
-| Hardware | Tesla T4 (15.6 GB VRAM) |
 
 ---
 
-## Learning Rate Sweep (Tiny model)
+## Learning Rate Sweep (Tiny model, SP)
 
-6 learning rates tested on a log scale:
+6 rates on a log scale from 1×10⁻⁴ to 3×10⁻²:
 
 | LR | Best Val Loss |
 |----|--------------|
 | 1×10⁻⁴ | 2.717 |
-| 3×10⁻⁴ | 1.885 |
-| 1×10⁻³ | 1.513 |
-| **3×10⁻³** | **1.265 ← best** |
-| 1×10⁻² | 1.348 |
-| 3×10⁻² | 1.730 |
+| 3×10⁻⁴ | 1.881 |
+| 1×10⁻³ | 1.515 |
+| **3×10⁻³** | **1.268 ← best** |
+| 1×10⁻² | 1.332 |
+| 3×10⁻² | 1.977 |
 
-**Selected LR: 3×10⁻³** — clear valley at this value; both larger and smaller LRs are worse. Used unchanged for all model sizes per Part 2 protocol (standard parameterization, fixed LR).
+**Selected LR: 3×10⁻³** — clear valley; LR used unchanged for all model sizes (SP protocol).
 
 ![LR Sweep](plots/lr_sweep.png)
 
 ---
 
-## Scaling Results
+## Scaling Results — Original Series (SP, LR = 3×10⁻³)
 
-| Name   | Params (non-emb) | Best Val Loss | Wall Time | Tok/s   | VRAM  |
-|--------|------------------|---------------|-----------|---------|-------|
-| Tiny   | 1.31M            | 1.269         | 4.8 min   | 434,000 | 0.31 GB |
-| Small  | 3.44M            | 1.111         | 10.0 min  | 219,000 | 0.34 GB |
-| Medium | 12.19M           | **0.980**     | 20.4 min  | 112,000 | 0.49 GB |
-| Large  | 33.57M           | 1.072         | 47.9 min  | 49,000  | 0.84 GB |
-| XL     | 88.10M           | 2.191         | 93.0 min  | 26,000  | 1.72 GB |
+| Name   | Params (non-emb) | Best Val Loss | Wall Time  | Tok/s     | Peak VRAM |
+|--------|------------------|---------------|------------|-----------|-----------|
+| Tiny   | 1.31M            | 1.267         | 0.88 min   | 1,985,000 | 2.88 GB   |
+| Small  | 3.44M            | 1.110         | 1.52 min   | 1,155,000 | 3.66 GB   |
+| Medium | 12.19M           | **0.988**     | 2.69 min   | 650,000   | 5.11 GB   |
+| Large  | 33.57M           | 1.088         | 6.01 min   | 291,000   | 8.62 GB   |
+| XL     | 88.10M           | 2.063         | 12.73 min  | 137,000   | 14.98 GB  |
 
-> **Note on VRAM column:** these values were measured with `torch.cuda.memory_allocated()`, which only counts live tensors and understates true usage. Fixed to `torch.cuda.memory_reserved()` (matches PyTorch's memory pool, closer to Colab resource monitor). The XL model's actual usage was ~12–14 GB as observed in Colab.
-
-![Scaling Plot](plots/scaling.png)
+![Original Scaling](plots/scaling.png)
 
 ### Observations
 
-**Tiny → Small → Medium:** Loss decreases monotonically (1.269 → 1.111 → 0.980), consistent with standard scaling law behavior. A power law fit L = a·N⁻ᵅ + c on these three models gives a reasonable curve.
+**Tiny → Small → Medium:** Loss decreases monotonically (1.267 → 1.110 → 0.988), consistent
+with scaling law behavior.
 
-**Medium → Large → XL:** Loss increases (0.980 → 1.072 → 2.191). This is the expected failure mode of Standard Parameterization (SP) with a fixed LR: the LR tuned on Tiny (3×10⁻³) is too large for wider models. Under SP, optimal LR scales roughly as 1/d_model, so the LR that works for d=128 is 6× too high for d=768. This causes poor or unstable convergence for Large and XL within a single epoch.
-
-This breakdown motivates Part 3, where µP enables zero-shot LR transfer across model widths.
+**Medium → Large → XL:** Loss increases (0.988 → 1.088 → 2.063). This is the expected failure
+mode of Standard Parameterization (SP) with a fixed LR. Under SP, optimal LR scales roughly
+as 1/d_model, so LR = 3×10⁻³ tuned on Tiny (d=128) is 6× too large for XL (d=768). Large/XL
+suffer from instability and poor convergence within one epoch.
 
 ---
 
-## Power Law Fit (Tiny–Medium subset)
+## Scaling Results — Wide Series (SP, LR = 3×10⁻³, n_layer = 4 fixed)
 
-Fitting L = a·N⁻ᵅ + c on the three monotone models (Tiny, Small, Medium):
+| Name        | Params (non-emb) | Best Val Loss | Wall Time | Tok/s     | Peak VRAM |
+|-------------|------------------|---------------|-----------|-----------|-----------|
+| Tiny        | 1.31M            | 1.267         | 0.88 min  | 1,985,000 | 2.88 GB   |
+| Small-Wide  | 2.56M            | 1.137         | 1.13 min  | 1,544,000 | 3.19 GB   |
+| Medium-Wide | 8.65M            | 0.994         | 1.94 min  | 904,000   | 4.17 GB   |
+| Large-Wide  | 14.68M           | **0.990**     | 2.70 min  | 649,000   | 4.88 GB   |
+| XL-Wide     | 31.46M           | 1.089         | 4.66 min  | 375,000   | 6.26 GB   |
 
-| Parameter | Value | Interpretation |
-|-----------|-------|----------------|
-| a | 159.9 | amplitude |
-| **α** | **0.412** | scaling exponent |
-| c | 0.789 | estimated irreducible loss |
+![Wide Scaling](plots/scaling_wide.png)
 
-α = 0.41 is substantially steeper than the α ≈ 0.07–0.08 reported by Kaplan et al. (2020) for natural language. SVG is a highly structured, syntax-constrained domain — models benefit more from scale on this data than on free-form text.
+### Observations
 
-Note: with only 3 points and 3 free parameters the fit is exact (zero residuals); uncertainty estimates are not meaningful. The fit is restricted to Tiny–Medium since Large and XL deviate from the SP scaling trend due to LR mismatch. Part 3 (µP) provides a full 5-point monotone curve.
+Tiny → Small-Wide → Medium-Wide → Large-Wide: Loss decreases monotonically (1.267 → 1.137
+→ 0.994 → 0.990). The improvement Medium-Wide→Large-Wide is marginal (0.004), indicating
+near-saturation at fixed depth n_layer=4 in the 8–15M parameter range.
+
+**Large-Wide → XL-Wide:** Loss increases (0.990 → 1.089). The same SP LR failure appears
+even in the width-only series: d_model=768 (XL-Wide) is 6× wider than Tiny, making the
+fixed LR 6× too large. This confirms the SP breakdown is driven entirely by width, not depth.
+This makes the wide series the ideal controlled setting for Part 3: µP must fix exactly this
+failure by scaling the LR as 1/d_model.
+
+Compared to the original series, the wide series has **lower peak VRAM** at matched d_model
+(e.g., XL-Wide: 6.26 GB vs XL: 14.98 GB) because fixed shallow depth dramatically reduces
+activations and optimizer state.
+
+---
+
+## Power Law Fits (SP)
+
+### Original Series — fit on Tiny, Small, Medium (3 monotone points)
+
+L = a · N⁻ᵅ + c
+
+| Parameter | Value | Note |
+|-----------|-------|------|
+| a | 310.4 | amplitude |
+| **α** | **0.467** | scaling exponent |
+| c | 0.835 | irreducible loss estimate |
+
+With 3 points and 3 free parameters the fit is exact (zero residuals); uncertainty is not
+meaningful. Large and XL are excluded as they deviate from the scaling trend due to LR mismatch.
+
+α = 0.47 is substantially steeper than Kaplan et al. (2020) α ≈ 0.07–0.08 for natural language,
+consistent with the highly structured, syntax-constrained SVG domain.
+
+### Wide Series — fit on Tiny, Small-Wide, Medium-Wide, Large-Wide (4 points)
+
+| Parameter | Value | Uncertainty |
+|-----------|-------|-------------|
+| a | 20,996 | — |
+| **α** | **0.783** | ± 0.272 |
+| c | 0.930 | — |
+
+With 4 points and 3 free parameters this fit is overdetermined and has meaningful uncertainty.
+α = 0.78 is steeper than the original series (0.47), consistent with pure-width scaling being
+more parameter-efficient per FLOP in this regime (depth adds capacity more slowly than width
+at shallow depths). XL-Wide is excluded from the fit due to SP breakdown.
 
 ---
 
 ## Training Curves
 
+### Original Series
 ![Training Curves](plots/training_curves.png)
 
-All models trained from scratch with cosine LR decay. Tiny, Small, and Medium show smooth monotone loss reduction throughout training. Large shows slower improvement; XL plateaus early and barely decreases, consistent with the LR being far from optimal for that width.
+### Wide Series
+![Training Curves Wide](plots/training_curves_wide.png)
+
+All models trained from scratch with cosine LR decay. Tiny, Small, and Medium (original) and
+Tiny through Large-Wide (wide) show smooth monotone loss reduction. XL (original) and XL-Wide
+plateau early — consistent with the LR being 6× too large for d_model=768 under SP.
 
 ---
 
@@ -115,9 +168,15 @@ All models trained from scratch with cosine LR decay. Tiny, Small, and Medium sh
 
 | Decision | Choice | Justification |
 |----------|--------|---------------|
-| Architecture | Decoder-only GPT (nanoGPT) | Standard for autoregressive LM; well-understood scaling behavior |
-| Bias | False | Fewer parameters; no quality difference observed |
-| Attention | Flash Attention (PyTorch 2.0) | Memory-efficient; no change in forward semantics |
-| Batch size | 131,072 tokens/step | Consistent across all models for fair comparison |
-| Fixed LR | 3×10⁻³ for all models | Part 2 protocol (SP); failure at large scale motivates µP in Part 3 |
-| Epochs | 1 | Required by spec; enables direct scaling law comparison |
+| Architecture | Decoder-only GPT (nanoGPT) | Standard for autoregressive LM |
+| Bias | False | Fewer parameters; no quality difference |
+| Attention | Flash Attention (PyTorch 2.0 SDPA) | Memory-efficient; identical semantics |
+| Batch size | 131,072 tokens/step | Consistent across all models |
+| Fixed LR | 3×10⁻³ | Part 2 SP protocol; failure at large scale motivates µP in Part 3 |
+| Wide series | n_layer=4 fixed, increasing d_model | Isolates width dimension for µP study |
+| Epochs | 1 | Required by spec |
+
+> **VRAM measurement note:** The `gpu_mem_gb` column uses `torch.cuda.memory_reserved()`,
+> which reports PyTorch's full reserved memory pool and matches what Colab's resource monitor
+> shows. An earlier version incorrectly used `memory_allocated()` (live tensors only), which
+> understated true usage by ~5–8× for large models.

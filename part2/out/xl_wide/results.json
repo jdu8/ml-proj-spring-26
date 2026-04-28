@@ -1,0 +1,10 @@
+{
+  "config": "xl_wide",
+  "n_params": 31464192,
+  "lr": 0.003,
+  "best_val_loss": 1.0887982225418091,
+  "final_train_loss": 1.0883293747901917,
+  "total_steps": 801,
+  "effective_batch_tokens": 131072,
+  "wall_time_s": 279.7
+}
