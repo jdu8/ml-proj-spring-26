@@ -2,6 +2,8 @@
 
 ## Model Architectures
 
+### Original Series (width + depth scale together)
+
 | Name   | ~Params (non-emb) | d_model | n_layers | n_heads | d_ff |
 |--------|-------------------|---------|----------|---------|------|
 | Tiny   | 1.31M             | 128     | 4        | 4       | 512  |
@@ -9,6 +11,18 @@
 | Medium | 12.19M            | 384     | 6        | 6       | 1536 |
 | Large  | 33.57M            | 512     | 10       | 8       | 2048 |
 | XL     | 88.10M            | 768     | 12       | 12      | 3072 |
+
+### Wide Series (width only — n_layers fixed at 4, designed for µP LR transfer)
+
+| Name        | ~Params (non-emb) | d_model | n_layers | n_heads | d_ff |
+|-------------|-------------------|---------|----------|---------|------|
+| Tiny        | 1.31M             | 128     | 4        | 4       | 512  |
+| Small-Wide  | 2.56M             | 192     | 4        | 6       | 768  |
+| Medium-Wide | 8.65M             | 384     | 4        | 6       | 1536 |
+| Large-Wide  | 14.68M            | 512     | 4        | 8       | 2048 |
+| XL-Wide     | 31.46M            | 768     | 4        | 12      | 3072 |
+
+µP's LR multipliers correct for width only (1/d_model scaling). Because the wide series fixes depth, the LR found on Tiny transfers zero-shot to all wider models. The original series mixes depth and width changes, which muddies µP's guarantees.
 
 Parameter counts exclude positional embeddings (Kaplan et al. 2020 convention).
 
@@ -58,6 +72,8 @@ Parameter counts exclude positional embeddings (Kaplan et al. 2020 convention).
 | Medium | 12.19M           | **0.980**     | 20.4 min  | 112,000 | 0.49 GB |
 | Large  | 33.57M           | 1.072         | 47.9 min  | 49,000  | 0.84 GB |
 | XL     | 88.10M           | 2.191         | 93.0 min  | 26,000  | 1.72 GB |
+
+> **Note on VRAM column:** these values were measured with `torch.cuda.memory_allocated()`, which only counts live tensors and understates true usage. Fixed to `torch.cuda.memory_reserved()` (matches PyTorch's memory pool, closer to Colab resource monitor). The XL model's actual usage was ~12–14 GB as observed in Colab.
 
 ![Scaling Plot](plots/scaling.png)
 

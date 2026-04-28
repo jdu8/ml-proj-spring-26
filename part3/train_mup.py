@@ -53,17 +53,28 @@ def parse_args():
 
 def make_mup_base_shapes(gpt_cfg: GPTConfig):
     """
-    Build base + delta models with the SAME depth (n_layer) as the target but
-    smaller width, so parameter names match exactly.
+    Build base + delta models for µP shape annotation.
 
-    base  width = n_head × 8   (head_dim=8, a small reference)
-    delta width = n_head × 16  (2× base, tells mup which dims scale with width)
+    Rules:
+      - Same n_layer as the target (so parameter names match exactly).
+      - FIXED base width (96) for ALL model sizes — this is the key requirement
+        for consistent LR multipliers across scales.
+        96 is the smallest value divisible by every n_head we use: {4, 6, 8, 12}.
+      - delta width = 192 (2× base).
+
+    With a fixed reference, MuAdamW applies multiplier = 96 / n_embd to every
+    hidden weight, so the effective LR decreases correctly as models get wider:
+        tiny  128 → ×0.75   small 192 → ×0.50
+        medium 384 → ×0.25  large 512 → ×0.19   xl 768 → ×0.125
     """
+    BASE_EMBD  = 96   # divisible by 4, 6, 8, 12 and < all target widths
+    DELTA_EMBD = 192
+
     def _build(n_embd):
         cfg = GPTConfig(
             vocab_size=gpt_cfg.vocab_size,
             block_size=gpt_cfg.block_size,
-            n_layer=gpt_cfg.n_layer,       # must match target depth exactly
+            n_layer=gpt_cfg.n_layer,   # must match target depth exactly
             n_head=gpt_cfg.n_head,
             n_embd=n_embd,
             n_ff=n_embd * 4,
@@ -71,9 +82,7 @@ def make_mup_base_shapes(gpt_cfg: GPTConfig):
         )
         return GPTMuP(cfg)
 
-    base_embd  = gpt_cfg.n_head * 8   # e.g. tiny→32, small→48, xl→96
-    delta_embd = gpt_cfg.n_head * 16
-    return _build(base_embd), _build(delta_embd)
+    return _build(BASE_EMBD), _build(DELTA_EMBD)
 
 
 # ── LR SCHEDULE ────────────────────────────────────────────────────────────────
@@ -230,7 +239,7 @@ def main():
 
         dt = time.time() - t0
         tok_per_sec = effective_batch / dt
-        gpu_mem_gb  = torch.cuda.memory_allocated() / 1e9 if device_type == "cuda" else 0.0
+        gpu_mem_gb  = torch.cuda.memory_reserved() / 1e9 if device_type == "cuda" else 0.0
 
         val_loss = None
         if step % args.eval_interval == 0 or step == total_steps - 1:

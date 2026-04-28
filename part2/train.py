@@ -206,7 +206,7 @@ def main():
 
         dt = time.time() - t0
         tok_per_sec = effective_batch / dt
-        gpu_mem_gb  = torch.cuda.memory_allocated() / 1e9 if device_type == "cuda" else 0.0
+        gpu_mem_gb  = torch.cuda.memory_reserved() / 1e9 if device_type == "cuda" else 0.0
 
         # evaluation
         val_loss = None

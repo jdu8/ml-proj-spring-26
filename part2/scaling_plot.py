@@ -16,16 +16,16 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 
-CONFIGS_ORDER = ["tiny", "small", "medium", "large", "xl"]
+CONFIGS_ORDER = ["tiny", "small", "medium", "large", "xl"]  # default (original series)
 
 
 def power_law(N, a, alpha, c):
     return a * N ** (-alpha) + c
 
 
-def load_results(results_dir: Path) -> list[dict]:
+def load_results(results_dir: Path, configs: list[str]) -> list[dict]:
     points = []
-    for name in CONFIGS_ORDER:
+    for name in configs:
         p = results_dir / name / "results.json"
         if p.exists():
             with open(p) as f:
@@ -59,9 +59,21 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--results_dir", default="out")
     p.add_argument("--plot_path",   default="plots/scaling.png")
+    p.add_argument("--series",      default="original",
+                   choices=["original", "wide"],
+                   help="Which model series to plot (original=5 configs, wide=width-only series)")
+    p.add_argument("--configs",     nargs="+", default=None,
+                   help="Override --series with an explicit list of config names")
     args = p.parse_args()
 
-    points = load_results(Path(args.results_dir))
+    if args.configs:
+        configs = args.configs
+    elif args.series == "wide":
+        configs = ["tiny", "small_wide", "medium_wide", "large_wide", "xl_wide"]
+    else:
+        configs = CONFIGS_ORDER
+
+    points = load_results(Path(args.results_dir), configs)
     if len(points) < 2:
         print(f"Need ≥2 trained models. Found: {[pt['name'] for pt in points]}")
         return
@@ -123,7 +135,8 @@ def main():
         "fit_uncertainty": {"a": float(perr[0]), "alpha": float(perr[1]), "c": float(perr[2])} if perr is not None else None,
         "extrapolation_10x": extrap_result,
     }
-    fit_path = Path(args.results_dir) / "scaling_fit_SP.json"
+    series_tag = args.series if not args.configs else "custom"
+    fit_path = Path(args.results_dir) / f"scaling_fit_SP_{series_tag}.json"
     with open(fit_path, "w") as f:
         json.dump(out, f, indent=2)
     print(f"Fit data → {fit_path}")
