@@ -36,12 +36,25 @@ part2/data/*.bin
 
 # Model checkpoints (up to ~350 MB for XL)
 part2/out/**/ckpt.pt
+part3/out/**/ckpt.pt
+part3/out2/**/ckpt.pt
 
 # Keep results.json, log.csv, sweep_summary.json (small, useful for report)
 !part2/out/**/results.json
 !part2/out/**/log.csv
 !part2/out/**/sweep_summary.json
 !part2/out/**/scaling_fit*.json
+
+
+!part3/out/**/results.json
+!part3/out/**/log.csv
+!part3/out/**/sweep_summary.json
+!part3/out/**/scaling_fit*.json
+
+!part3/out2/**/results.json
+!part3/out2/**/log.csv
+!part3/out2/**/sweep_summary.json
+!part3/out2/**/scaling_fit*.json
 
 # ── Jupyter ───────────────────────────────────────────────────────────────────
 .ipynb_checkpoints/

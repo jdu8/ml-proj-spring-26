@@ -1,0 +1,11 @@
+{
+  "config": "xl",
+  "parameterization": "muP",
+  "n_params": 91245312,
+  "lr": 0.003,
+  "best_val_loss": 1.4774647188186645,
+  "final_train_loss": 1.4494732320308685,
+  "total_steps": 801,
+  "effective_batch_tokens": 131072,
+  "wall_time_s": 778.8
+}

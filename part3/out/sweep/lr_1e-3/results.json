@@ -1,0 +1,11 @@
+{
+  "config": "tiny",
+  "parameterization": "muP",
+  "n_params": 1836160,
+  "lr": 0.001,
+  "best_val_loss": 1.4633019852638245,
+  "final_train_loss": 1.4406816363334656,
+  "total_steps": 801,
+  "effective_batch_tokens": 131072,
+  "wall_time_s": 53.8
+}

@@ -1,0 +1,37 @@
+{
+  "config": "tiny",
+  "parameterization": "muP",
+  "results": [
+    {
+      "lr": 0.01,
+      "val_loss": 1.1695873856544494,
+      "run_dir": "out/sweep/lr_1e-2"
+    },
+    {
+      "lr": 0.003,
+      "val_loss": 1.2676187014579774,
+      "run_dir": "out/sweep/lr_3e-3"
+    },
+    {
+      "lr": 0.03,
+      "val_loss": 1.3944604945182801,
+      "run_dir": "out/sweep/lr_3e-2"
+    },
+    {
+      "lr": 0.001,
+      "val_loss": 1.4633019852638245,
+      "run_dir": "out/sweep/lr_1e-3"
+    },
+    {
+      "lr": 0.0003,
+      "val_loss": 1.9622528171539306,
+      "run_dir": "out/sweep/lr_3e-4"
+    },
+    {
+      "lr": 0.0001,
+      "val_loss": 3.181229100227356,
+      "run_dir": "out/sweep/lr_1e-4"
+    }
+  ],
+  "best_lr": 0.01
+}

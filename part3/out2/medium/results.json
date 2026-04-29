@@ -1,0 +1,11 @@
+{
+  "config": "medium",
+  "parameterization": "muP",
+  "n_params": 13767552,
+  "lr": 0.003,
+  "best_val_loss": 1.1063763213157654,
+  "final_train_loss": 1.1062781512737274,
+  "total_steps": 801,
+  "effective_batch_tokens": 131072,
+  "wall_time_s": 163.3
+}
