@@ -1,0 +1,47 @@
+{
+  "config": "small",
+  "parameterization": "muP",
+  "results": [
+    {
+      "lr": 0.003,
+      "val_loss": 1.1763755369186402,
+      "run_dir": "out/small_sweep/lr_3e-3"
+    },
+    {
+      "lr": 0.01,
+      "val_loss": 1.2528570580482483,
+      "run_dir": "out/small_sweep/lr_1e-2"
+    },
+    {
+      "lr": 0.03,
+      "val_loss": 1.3117504549026489,
+      "run_dir": "out/small_sweep/lr_3e-2"
+    },
+    {
+      "lr": 0.001,
+      "val_loss": 1.3604770851135255,
+      "run_dir": "out/small_sweep/lr_1e-3"
+    },
+    {
+      "lr": 0.0003,
+      "val_loss": 1.891679697036743,
+      "run_dir": "out/small_sweep/lr_3e-4"
+    },
+    {
+      "lr": 0.1,
+      "val_loss": 2.463530297279358,
+      "run_dir": "out/small_sweep/lr_1e-1"
+    },
+    {
+      "lr": 0.3,
+      "val_loss": 2.9445799589157104,
+      "run_dir": "out/small_sweep/lr_3e-1"
+    },
+    {
+      "lr": 0.0001,
+      "val_loss": 3.0897137928009033,
+      "run_dir": "out/small_sweep/lr_1e-4"
+    }
+  ],
+  "best_lr": 0.003
+}

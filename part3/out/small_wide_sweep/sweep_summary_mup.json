@@ -1,0 +1,47 @@
+{
+  "config": "small_wide",
+  "parameterization": "muP",
+  "results": [
+    {
+      "lr": 0.01,
+      "val_loss": 1.1925180745124817,
+      "run_dir": "out/small_wide_sweep/lr_1e-2"
+    },
+    {
+      "lr": 0.003,
+      "val_loss": 1.204705376625061,
+      "run_dir": "out/small_wide_sweep/lr_3e-3"
+    },
+    {
+      "lr": 0.03,
+      "val_loss": 1.2561711263656616,
+      "run_dir": "out/small_wide_sweep/lr_3e-2"
+    },
+    {
+      "lr": 0.001,
+      "val_loss": 1.3837498927116394,
+      "run_dir": "out/small_wide_sweep/lr_1e-3"
+    },
+    {
+      "lr": 0.0003,
+      "val_loss": 1.8754212307929992,
+      "run_dir": "out/small_wide_sweep/lr_3e-4"
+    },
+    {
+      "lr": 0.1,
+      "val_loss": 2.083592712879181,
+      "run_dir": "out/small_wide_sweep/lr_1e-1"
+    },
+    {
+      "lr": 0.3,
+      "val_loss": 2.8634773445129396,
+      "run_dir": "out/small_wide_sweep/lr_3e-1"
+    },
+    {
+      "lr": 0.0001,
+      "val_loss": 3.1298852872848513,
+      "run_dir": "out/small_wide_sweep/lr_1e-4"
+    }
+  ],
+  "best_lr": 0.01
+}

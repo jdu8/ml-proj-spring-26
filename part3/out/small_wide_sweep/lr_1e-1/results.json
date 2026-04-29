@@ -1,0 +1,11 @@
+{
+  "config": "small_wide",
+  "parameterization": "muP",
+  "n_params": 3344064,
+  "lr": 0.1,
+  "best_val_loss": 2.083592712879181,
+  "final_train_loss": 2.046298325061798,
+  "total_steps": 801,
+  "effective_batch_tokens": 131072,
+  "wall_time_s": 70.1
+}

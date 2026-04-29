@@ -1,0 +1,36 @@
+{
+  "config": "small",
+  "results": [
+    {
+      "lr": 0.003,
+      "val_loss": 1.1171633887290955,
+      "run_dir": "out/small_sweep/lr_3e-3"
+    },
+    {
+      "lr": 0.001,
+      "val_loss": 1.2812633585929871,
+      "run_dir": "out/small_sweep/lr_1e-3"
+    },
+    {
+      "lr": 0.01,
+      "val_loss": 1.3546991634368897,
+      "run_dir": "out/small_sweep/lr_1e-2"
+    },
+    {
+      "lr": 0.0003,
+      "val_loss": 1.565112087726593,
+      "run_dir": "out/small_sweep/lr_3e-4"
+    },
+    {
+      "lr": 0.0001,
+      "val_loss": 2.0887609243392946,
+      "run_dir": "out/small_sweep/lr_1e-4"
+    },
+    {
+      "lr": 0.03,
+      "val_loss": 2.7751365756988524,
+      "run_dir": "out/small_sweep/lr_3e-2"
+    }
+  ],
+  "best_lr": 0.003
+}
