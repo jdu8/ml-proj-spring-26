@@ -1,0 +1,13 @@
+{
+  "config": "large_wide",
+  "n_params": 14684672,
+  "lr": 0.003,
+  "dropout": 0.0,
+  "weight_decay": 0.1,
+  "num_epochs": 1,
+  "best_val_loss": 0.9826189815998078,
+  "final_train_loss": 0.9828618168830872,
+  "total_steps": 801,
+  "effective_batch_tokens": 131072,
+  "wall_time_s": 162.7
+}

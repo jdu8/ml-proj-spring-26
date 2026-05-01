@@ -40,7 +40,7 @@ def parse_args():
     p.add_argument("--temperature",     type=float, default=0.8)
     p.add_argument("--top_k",           type=int,   default=50)
     p.add_argument("--top_p",           type=float, default=0.95)
-    p.add_argument("--max_new_tokens",  type=int,   default=512)
+    p.add_argument("--max_new_tokens",  type=int,   default=900)
     p.add_argument("--batch_size",      type=int,   default=32)
     p.add_argument("--eval_batches",    type=int,   default=200,
                    help="Test batches for perplexity (increase for tighter estimate)")

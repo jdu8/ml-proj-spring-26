@@ -38,6 +38,7 @@ part2/data/*.bin
 part2/out/**/ckpt.pt
 part3/out/**/ckpt.pt
 part3/out2/**/ckpt.pt
+part4/out/**/ckpt.pt
 
 # Keep results.json, log.csv, sweep_summary.json (small, useful for report)
 !part2/out/**/results.json

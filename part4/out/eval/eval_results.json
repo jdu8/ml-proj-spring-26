@@ -1,0 +1,20 @@
+{
+  "test_loss": 0.753871,
+  "perplexity": 2.1252,
+  "validity": {
+    "n_samples": 50,
+    "temperature": 0.8,
+    "top_k": 50,
+    "top_p": 0.95,
+    "xml_valid_count": 13,
+    "xml_valid_rate": 0.26,
+    "render_ok_count": 0,
+    "render_rate": 0.0,
+    "structural_ok_count": 14,
+    "structural_rate": 0.28,
+    "has_viewbox_rate": 1.0,
+    "has_xmlns_rate": 1.0,
+    "avg_length": 764.2,
+    "median_length": 783.0
+  }
+}

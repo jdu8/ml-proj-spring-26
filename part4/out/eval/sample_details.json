@@ -1,0 +1,652 @@
+[
+  {
+    "index": 0,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 1032
+  },
+  {
+    "index": 1,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 765
+  },
+  {
+    "index": 2,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 851
+  },
+  {
+    "index": 3,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 793
+  },
+  {
+    "index": 4,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 1969
+  },
+  {
+    "index": 5,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 446
+  },
+  {
+    "index": 6,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 788
+  },
+  {
+    "index": 7,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 907
+  },
+  {
+    "index": 8,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 784
+  },
+  {
+    "index": 9,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 738
+  },
+  {
+    "index": 10,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 532
+  },
+  {
+    "index": 11,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 798
+  },
+  {
+    "index": 12,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 880
+  },
+  {
+    "index": 13,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 669
+  },
+  {
+    "index": 14,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 719
+  },
+  {
+    "index": 15,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 717
+  },
+  {
+    "index": 16,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 773
+  },
+  {
+    "index": 17,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 974
+  },
+  {
+    "index": 18,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 853
+  },
+  {
+    "index": 19,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 982
+  },
+  {
+    "index": 20,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 394
+  },
+  {
+    "index": 21,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 397
+  },
+  {
+    "index": 22,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 590
+  },
+  {
+    "index": 23,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 628
+  },
+  {
+    "index": 24,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 850
+  },
+  {
+    "index": 25,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 782
+  },
+  {
+    "index": 26,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 243
+  },
+  {
+    "index": 27,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 839
+  },
+  {
+    "index": 28,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 442
+  },
+  {
+    "index": 29,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 803
+  },
+  {
+    "index": 30,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 1080
+  },
+  {
+    "index": 31,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 816
+  },
+  {
+    "index": 32,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 897
+  },
+  {
+    "index": 33,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 1035
+  },
+  {
+    "index": 34,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 854
+  },
+  {
+    "index": 35,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 730
+  },
+  {
+    "index": 36,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 795
+  },
+  {
+    "index": 37,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 521
+  },
+  {
+    "index": 38,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 437
+  },
+  {
+    "index": 39,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 682
+  },
+  {
+    "index": 40,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 956
+  },
+  {
+    "index": 41,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 648
+  },
+  {
+    "index": 42,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 570
+  },
+  {
+    "index": 43,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 655
+  },
+  {
+    "index": 44,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 1034
+  },
+  {
+    "index": 45,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 720
+  },
+  {
+    "index": 46,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 839
+  },
+  {
+    "index": 47,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 736
+  },
+  {
+    "index": 48,
+    "xml_valid": true,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": true,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": true
+    },
+    "length": 432
+  },
+  {
+    "index": 49,
+    "xml_valid": false,
+    "renders": false,
+    "structural": {
+      "has_svg_root": true,
+      "has_svg_close": false,
+      "has_viewbox": true,
+      "has_xmlns": true,
+      "structural_ok": false
+    },
+    "length": 834
+  }
+]

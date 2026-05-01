@@ -72,7 +72,7 @@ def parse_args():
     p.add_argument("--temperatures",     nargs="+",  type=float, default=[0.5, 0.8, 1.0])
     p.add_argument("--top_k",            type=int,   default=50)
     p.add_argument("--top_p",            type=float, default=0.95)
-    p.add_argument("--max_new_tokens",   type=int,   default=512)
+    p.add_argument("--max_new_tokens",   type=int,   default=900)
     p.add_argument("--seed",             type=int,   default=42)
     p.add_argument("--no_render",        action="store_true", help="Skip CairoSVG rendering")
     p.add_argument("--grid_cols",        type=int,   default=5)
