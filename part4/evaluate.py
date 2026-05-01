@@ -51,7 +51,7 @@ def parse_args():
 # ── model / tokenizer ─────────────────────────────────────────────────────────
 
 def load_model(ckpt_path, device):
-    ckpt = torch.load(ckpt_path, map_location=device)
+    ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
     cfg  = ckpt["config"]
     if not isinstance(cfg, GPTConfig):
         cfg = GPTConfig(**vars(cfg))
