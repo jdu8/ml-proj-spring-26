@@ -7,7 +7,7 @@
       "top_p": 0.95,
       "svg_path": "out/samples/unconditional/sample_00_t0.5.svg",
       "png_path": "out/samples/unconditional/sample_00_t0.5.png",
-      "rendered": false,
+      "rendered": true,
       "length": 538
     },
     {
@@ -17,8 +17,8 @@
       "top_p": 0.95,
       "svg_path": "out/samples/unconditional/sample_01_t0.5.svg",
       "png_path": "out/samples/unconditional/sample_01_t0.5.png",
-      "rendered": false,
-      "length": 754
+      "rendered": true,
+      "length": 816
     },
     {
       "label": "sample_02_t0.5",
@@ -28,7 +28,7 @@
       "svg_path": "out/samples/unconditional/sample_02_t0.5.svg",
       "png_path": "out/samples/unconditional/sample_02_t0.5.png",
       "rendered": false,
-      "length": 741
+      "length": 1564
     },
     {
       "label": "sample_03_t0.8",
@@ -37,8 +37,8 @@
       "top_p": 0.95,
       "svg_path": "out/samples/unconditional/sample_03_t0.8.svg",
       "png_path": "out/samples/unconditional/sample_03_t0.8.png",
-      "rendered": false,
-      "length": 958
+      "rendered": true,
+      "length": 612
     },
     {
       "label": "sample_04_t0.8",
@@ -48,7 +48,7 @@
       "svg_path": "out/samples/unconditional/sample_04_t0.8.svg",
       "png_path": "out/samples/unconditional/sample_04_t0.8.png",
       "rendered": false,
-      "length": 644
+      "length": 1402
     },
     {
       "label": "sample_05_t0.8",
@@ -57,8 +57,8 @@
       "top_p": 0.95,
       "svg_path": "out/samples/unconditional/sample_05_t0.8.svg",
       "png_path": "out/samples/unconditional/sample_05_t0.8.png",
-      "rendered": false,
-      "length": 396
+      "rendered": true,
+      "length": 485
     },
     {
       "label": "sample_06_t1.0",
@@ -68,7 +68,7 @@
       "svg_path": "out/samples/unconditional/sample_06_t1.0.svg",
       "png_path": "out/samples/unconditional/sample_06_t1.0.png",
       "rendered": false,
-      "length": 406
+      "length": 1690
     },
     {
       "label": "sample_07_t1.0",
@@ -78,7 +78,7 @@
       "svg_path": "out/samples/unconditional/sample_07_t1.0.svg",
       "png_path": "out/samples/unconditional/sample_07_t1.0.png",
       "rendered": false,
-      "length": 228
+      "length": 1510
     },
     {
       "label": "sample_08_t1.0",
@@ -87,8 +87,8 @@
       "top_p": 0.95,
       "svg_path": "out/samples/unconditional/sample_08_t1.0.svg",
       "png_path": "out/samples/unconditional/sample_08_t1.0.png",
-      "rendered": false,
-      "length": 376
+      "rendered": true,
+      "length": 484
     }
   ],
   "prefix_conditioned": [
@@ -100,7 +100,7 @@
       "temperature": 0.8,
       "svg_path": "out/samples/prefix_conditioned/partial_face_t0.8.svg",
       "png_path": "out/samples/prefix_conditioned/partial_face_t0.8.png",
-      "rendered": false
+      "rendered": true
     },
     {
       "label": "open_path_t0.8",
@@ -110,7 +110,7 @@
       "temperature": 0.8,
       "svg_path": "out/samples/prefix_conditioned/open_path_t0.8.svg",
       "png_path": "out/samples/prefix_conditioned/open_path_t0.8.png",
-      "rendered": false
+      "rendered": true
     },
     {
       "label": "group_one_shape_t0.8",
@@ -130,7 +130,7 @@
       "temperature": 0.8,
       "svg_path": "out/samples/prefix_conditioned/star_partial_t0.8.svg",
       "png_path": "out/samples/prefix_conditioned/star_partial_t0.8.png",
-      "rendered": false
+      "rendered": true
     },
     {
       "label": "arrow_start_t0.8",

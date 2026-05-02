@@ -6,15 +6,15 @@
     "temperature": 0.8,
     "top_k": 50,
     "top_p": 0.95,
-    "xml_valid_count": 13,
-    "xml_valid_rate": 0.26,
-    "render_ok_count": 0,
-    "render_rate": 0.0,
-    "structural_ok_count": 14,
-    "structural_rate": 0.28,
+    "xml_valid_count": 26,
+    "xml_valid_rate": 0.52,
+    "render_ok_count": 25,
+    "render_rate": 0.5,
+    "structural_ok_count": 29,
+    "structural_rate": 0.58,
     "has_viewbox_rate": 1.0,
     "has_xmlns_rate": 1.0,
-    "avg_length": 764.2,
-    "median_length": 783.0
+    "avg_length": 1053.5,
+    "median_length": 1088.0
   }
 }

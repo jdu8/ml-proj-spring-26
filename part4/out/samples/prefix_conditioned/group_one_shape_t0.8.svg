@@ -1,36 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g fill="blue"><rect x="10" y="10" width="30" height="30"/>
 
-<rect x="10" y="16" width="30" height="30" rx="10" ry="10" transform="rotate(-45 16 24) rotate(-90)" style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" transform="translate(26 4) rotate(-90)"/><rect x="44" y="32" width="30" height="30" rx="5" transform="matrix(-1.8 0 0 -1.8 -2 24) rotate(-90)" style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none" transform="translate(-30 4) scale(-1 -1) scale(0.5 -1.7) scale(1.9 -1.7) scale(.44, translate(-35 -36.8 -15.0) scale(.28683)"/>
-
-<g transform="translate(24 -63) scale(1.9 -1.6) scale(.28, -.28) scale(.28571)">
-
-<circle cx="39" cy="18" r="3" style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2px;"/>
-
-<circle cx="70" cy="18" r="3" style="fill:#000000;stroke:none;stroke-width:2px" transform="translate(8 -5.8) scale(.2943) scale(.2796)"/>
-
-<path d="M30.5,62.2H26.2V58.5H35.1L24,59.5,66.6,54.2h-.5V62.2H6.3v-1.9H27.7L9.5,56.3H9.5L22.8,62.2H30.5Z" style="fill:none;stroke:#000000;stroke-linejoin:round;stroke-width:2px"/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
-<g/>
-
+<rect x="22" y="34" width="30" height="30" rx="2" ry="2"/><rect x="28" y="32" width="30" height="30" rx="2" ry="2"/><rect x="30" y="48" width="30" height="30" rx="2" ry="2"/><rect x="34" y="44" width="20" height="18" rx="2" ry="2"/><rect x="34" y="44" width="20" height="14" rx="2" ry="2"/><rect x="30" y="34" width="16" height="14" rx="2" ry="2"/><rect height="14" rx="2" ry="2" transform="translate(14.4 -30) rotate(-45)" width="20" height="14" rx="2" transform="translate(6.8 -30) rotate(-45)" width="20" x="30" y="32"/><rect height="14" transform="translate(-30.2 34.0) rotate(-45)"/><rect x="29.9" y="34.8" width="18.3" height="17.6" rx="2" ry="2" transform="translate(7.6 33.4) rotate(-45)" x="32.4" y="38.6" width="18.3" height="18.3" rx="2" ry="2"/></svg>
