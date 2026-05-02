@@ -11,7 +11,7 @@ The optimal LR found on Tiny transfers to all larger models via explicit width s
 | Output layer | `nn.Linear` | `MuReadout` | `nn.Linear` |
 | Optimizer | `AdamW` | `MuAdamW` | `AdamW` |
 | LR scaling | fixed | mup package (per-param) | `lr × BASE_WIDTH/n_embd` |
-| Steps/epoch | ~800 | ~800 | ~12,800 |
+| Steps/epoch | ~800 | ~800 | ~800 |
 | Model series | original 5 | wide (n_layer=4) | original 5 |
 
 The core µP change is just two things: **1/d_head attention** and **LR ∝ 1/width**.
