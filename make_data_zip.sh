@@ -13,7 +13,7 @@
 
 set -e
 
-VENV_PYTHON="./venv/bin/python"
+VENV_"python="./venv/bin/"python"
 ZIP_NAME="svg_data.zip"
 
 echo "=== Step 1: tokenize JSONL splits → binary files ==="
@@ -22,7 +22,7 @@ if [ -f part2/data/train.bin ]; then
 else
     echo "  Running part2/prepare.py ..."
     cd part2
-    $VENV_PYTHON prepare.py
+    $VENV_"python prepare.py
     cd ..
 fi
 

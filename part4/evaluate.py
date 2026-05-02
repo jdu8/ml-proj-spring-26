@@ -137,21 +137,39 @@ def truncate_at_svg_close(text):
     return text[:pos + len(marker)] if pos != -1 else text
 
 
+MAX_CONSECUTIVE_FAILURES = 10
+
+
 # ── generation for eval ───────────────────────────────────────────────────────
 
 @torch.no_grad()
 def generate_for_eval(model, tok, n, max_new_tokens, temperature, top_k, top_p, device):
+    """Generate until n samples are collected, stopping on MAX_CONSECUTIVE_FAILURES in a row."""
     samples = []
+    consecutive_failures = 0
+    attempts = 0
     ids = tok.encode("<svg").ids
     idx = torch.tensor([ids], dtype=torch.long, device=device)
-    for i in range(n):
-        out = model.generate(idx, max_new_tokens, temperature=temperature,
-                             top_k=top_k, top_p=top_p)
+
+    while len(samples) < n:
+        attempts += 1
+        out  = model.generate(idx, max_new_tokens, temperature=temperature,
+                               top_k=top_k, top_p=top_p)
         text = tok.decode(out[0].tolist())
         text = truncate_at_svg_close(text)
-        samples.append(text)
-        if (i + 1) % 10 == 0:
-            print(f"    generated {i+1}/{n}", flush=True)
+
+        if check_svg_renders(text):
+            samples.append(text)
+            consecutive_failures = 0
+            if len(samples) % 10 == 0:
+                print(f"    collected {len(samples)}/{n}  (attempt {attempts})", flush=True)
+        else:
+            consecutive_failures += 1
+            if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                print(f"    Stopped after {MAX_CONSECUTIVE_FAILURES} consecutive render failures "
+                      f"({len(samples)}/{n} collected).")
+                break
+
     return samples
 
 

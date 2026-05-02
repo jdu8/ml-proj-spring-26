@@ -2,12 +2,12 @@
 Generate SVG samples from a trained model.
 
 Produces:
-  - 10 unconditional samples at temperatures 0.5, 0.8, 1.0
-  - 5 prefix-conditioned completions
-  - PNGs for every sample (via CairoSVG)
+  - At least 10 unconditional samples (retries until 10 render, stops on 10 consecutive failures)
+  - At least 5 prefix-conditioned completions (one per prefix, same retry logic)
+  - PNGs for every successful sample (via CairoSVG)
   - A rendered grid image for the report
 
-Usage (Colab):
+Usage:
     python generate.py --ckpt /path/to/ckpt.pt
     python generate.py --ckpt /path/to/ckpt.pt --out_dir samples --n_unconditional 15
 """
@@ -19,11 +19,11 @@ from pathlib import Path
 import torch
 import numpy as np
 
-# ── resolve sibling imports ────────────────────────────────────────────────────
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT / "part2"))
 from model import GPT, GPTConfig
 
+MAX_CONSECUTIVE_FAILURES = 10
 
 # ── prefixes for conditioned generation ───────────────────────────────────────
 PREFIX_SAMPLES = [
@@ -61,6 +61,7 @@ PREFIX_SAMPLES = [
 ]
 
 UNCONDITIONAL_PREFIX = "<svg"
+TEMPERATURES = [0.5, 0.8, 1.0]
 
 
 def parse_args():
@@ -69,7 +70,9 @@ def parse_args():
     p.add_argument("--tokenizer",        default=str(ROOT / "part1/tokenizer/tokenizer_4096.json"))
     p.add_argument("--out_dir",          default="out/samples")
     p.add_argument("--n_unconditional",  type=int,   default=10)
-    p.add_argument("--temperatures",     nargs="+",  type=float, default=[0.5, 0.8, 1.0])
+    p.add_argument("--n_prefix",         type=int,   default=1,
+                   help="Successful samples to collect per prefix")
+    p.add_argument("--temperatures",     nargs="+",  type=float, default=TEMPERATURES)
     p.add_argument("--top_k",            type=int,   default=50)
     p.add_argument("--top_p",            type=float, default=0.95)
     p.add_argument("--max_new_tokens",   type=int,   default=900)
@@ -90,7 +93,6 @@ def load_model(ckpt_path, device):
         gpt_cfg = GPTConfig(**{k: v for k, v in vars(cfg).items()})
     gpt_cfg.dropout = 0.0
     model = GPT(gpt_cfg).to(device)
-    # strip compile prefix if present
     state = {k.replace("_orig_mod.", ""): v for k, v in ckpt["model"].items()}
     model.load_state_dict(state)
     model.eval()
@@ -102,8 +104,7 @@ def load_model(ckpt_path, device):
 
 def load_tokenizer(path):
     from tokenizers import Tokenizer
-    tok = Tokenizer.from_file(path)
-    return tok
+    return Tokenizer.from_file(path)
 
 
 def encode(tok, text):
@@ -125,12 +126,9 @@ def generate_sample(model, tok, prompt_text, max_new_tokens, temperature, top_k,
 
 
 def truncate_at_svg_close(text):
-    """Trim to the first </svg> for cleaner outputs."""
     marker = "</svg>"
     pos = text.find(marker)
-    if pos != -1:
-        return text[:pos + len(marker)]
-    return text
+    return text[:pos + len(marker)] if pos != -1 else text
 
 
 # ── rendering ────────────────────────────────────────────────────────────────
@@ -138,14 +136,14 @@ def truncate_at_svg_close(text):
 def try_render(svg_text, png_path):
     try:
         import cairosvg
-        cairosvg.svg2png(bytestring=svg_text.encode(), write_to=str(png_path), output_width=128, output_height=128)
+        cairosvg.svg2png(bytestring=svg_text.encode(), write_to=str(png_path),
+                         output_width=128, output_height=128)
         return True
     except Exception:
         return False
 
 
 def try_render_fallback(svg_text, png_path):
-    """Return a blank placeholder PNG when rendering fails."""
     try:
         from PIL import Image
         img = Image.new("RGB", (128, 128), color=(240, 240, 240))
@@ -155,9 +153,74 @@ def try_render_fallback(svg_text, png_path):
     return False
 
 
+# ── retry-based generation ────────────────────────────────────────────────────
+
+def generate_until_renders(
+    model, tok, prompt_text, n_target,
+    max_new_tokens, temperatures, top_k, top_p, device,
+    save_dir, label_prefix, no_render=False,
+):
+    """
+    Generate samples until n_target render successfully.
+    Cycles through temperatures for variety.
+    Stops early if MAX_CONSECUTIVE_FAILURES renders fail in a row.
+    Returns list of result dicts.
+    """
+    results = []
+    consecutive_failures = 0
+    attempts = 0
+    temp_cycle = list(temperatures)
+
+    while len(results) < n_target:
+        temp = temp_cycle[attempts % len(temp_cycle)]
+        attempts += 1
+
+        svg_text = generate_sample(
+            model, tok, prompt_text,
+            max_new_tokens, temp, top_k, top_p, device
+        )
+        svg_text = truncate_at_svg_close(svg_text)
+
+        idx = len(results)
+        label = f"{label_prefix}_{idx:02d}_t{temp}"
+        svg_path = save_dir / f"{label}.svg"
+        png_path = save_dir / f"{label}.png"
+        svg_path.write_text(svg_text, encoding="utf-8")
+
+        rendered = False
+        if not no_render:
+            rendered = try_render(svg_text, png_path)
+            if not rendered:
+                try_render_fallback(svg_text, png_path)
+
+        status = "rendered" if rendered else "render failed"
+        print(f"  attempt {attempts:3d} | T={temp} | {status} | {len(svg_text)} chars")
+
+        if rendered or no_render:
+            results.append({
+                "label":       label,
+                "temperature": temp,
+                "top_k":       top_k,
+                "top_p":       top_p,
+                "svg_path":    str(svg_path),
+                "png_path":    str(png_path),
+                "rendered":    rendered,
+                "length":      len(svg_text),
+                "attempt":     attempts,
+            })
+            consecutive_failures = 0
+        else:
+            consecutive_failures += 1
+            if consecutive_failures >= MAX_CONSECUTIVE_FAILURES:
+                print(f"  Stopped: {MAX_CONSECUTIVE_FAILURES} consecutive render failures.")
+                break
+
+    return results, attempts
+
+
 # ── grid plot ─────────────────────────────────────────────────────────────────
 
-def make_grid(image_paths, titles, out_path, cols=5, cell_size=128, font_size=8):
+def make_grid(image_paths, titles, out_path, cols=5, font_size=8):
     try:
         import matplotlib
         matplotlib.use("Agg")
@@ -172,7 +235,8 @@ def make_grid(image_paths, titles, out_path, cols=5, cell_size=128, font_size=8)
         axes = np.array(axes).reshape(-1)
         for ax, (path, title) in zip(axes, valid):
             try:
-                img = Image.open(path)
+                from PIL import Image as PILImage
+                img = PILImage.open(path)
                 ax.imshow(img)
             except Exception:
                 ax.set_facecolor("#f0f0f0")
@@ -199,7 +263,7 @@ def main():
     model, gpt_cfg = load_model(args.ckpt, device)
     tok = load_tokenizer(args.tokenizer)
 
-    out_dir = Path(args.out_dir)
+    out_dir           = Path(args.out_dir)
     unconditional_dir = out_dir / "unconditional"
     prefix_dir        = out_dir / "prefix_conditioned"
     for d in [unconditional_dir, prefix_dir]:
@@ -209,105 +273,71 @@ def main():
 
     # ── 1. unconditional generation ───────────────────────────────────────────
     print("=" * 60)
-    print("UNCONDITIONAL GENERATION")
+    print(f"UNCONDITIONAL GENERATION  (target: {args.n_unconditional} rendered)")
+    print(f"Temperatures: {args.temperatures}  |  stop after {MAX_CONSECUTIVE_FAILURES} consecutive failures")
     print("=" * 60)
 
-    unc_png_paths, unc_titles = [], []
-    sample_idx = 0
-
-    for temp in args.temperatures:
-        n_this_temp = max(1, args.n_unconditional // len(args.temperatures))
-        for i in range(n_this_temp):
-            label = f"sample_{sample_idx:02d}_t{temp}"
-            print(f"  [{label}] generating...", end=" ", flush=True)
-
-            svg_text = generate_sample(
-                model, tok, UNCONDITIONAL_PREFIX,
-                args.max_new_tokens, temp, args.top_k, args.top_p, device
-            )
-            svg_text = truncate_at_svg_close(svg_text)
-
-            svg_path = unconditional_dir / f"{label}.svg"
-            png_path = unconditional_dir / f"{label}.png"
-            svg_path.write_text(svg_text, encoding="utf-8")
-
-            rendered = False
-            if not args.no_render:
-                rendered = try_render(svg_text, png_path)
-                if not rendered:
-                    try_render_fallback(svg_text, png_path)
-
-            print(f"{'rendered' if rendered else 'render failed'}  ({len(svg_text)} chars)")
-
-            entry = {
-                "label":      label,
-                "temperature": temp,
-                "top_k":      args.top_k,
-                "top_p":      args.top_p,
-                "svg_path":   str(svg_path),
-                "png_path":   str(png_path) if not args.no_render else None,
-                "rendered":   rendered,
-                "length":     len(svg_text),
-            }
-            all_results["unconditional"].append(entry)
-            unc_png_paths.append(str(png_path))
-            unc_titles.append(f"T={temp} #{i+1}")
-            sample_idx += 1
+    unc_results, unc_attempts = generate_until_renders(
+        model, tok, UNCONDITIONAL_PREFIX,
+        n_target      = args.n_unconditional,
+        max_new_tokens= args.max_new_tokens,
+        temperatures  = args.temperatures,
+        top_k         = args.top_k,
+        top_p         = args.top_p,
+        device        = device,
+        save_dir      = unconditional_dir,
+        label_prefix  = "sample",
+        no_render     = args.no_render,
+    )
+    all_results["unconditional"] = unc_results
+    print(f"\n  Got {len(unc_results)}/{args.n_unconditional} in {unc_attempts} attempts.\n")
 
     # ── 2. prefix-conditioned generation ─────────────────────────────────────
-    print("\n" + "=" * 60)
-    print("PREFIX-CONDITIONED GENERATION")
+    print("=" * 60)
+    print(f"PREFIX-CONDITIONED GENERATION  (target: {args.n_prefix} rendered per prefix)")
+    print(f"Stop after {MAX_CONSECUTIVE_FAILURES} consecutive failures per prefix")
     print("=" * 60)
 
     pfx_png_paths, pfx_titles = [], []
     for pfx in PREFIX_SAMPLES:
-        for temp in [0.8]:  # one temperature per prefix to keep it focused
-            label = f"{pfx['name']}_t{temp}"
-            print(f"  [{label}]")
-            print(f"    {pfx['desc']}")
+        print(f"\n  Prefix: {pfx['name']}")
+        print(f"  {pfx['desc']}")
 
-            svg_text = generate_sample(
-                model, tok, pfx["svg"],
-                args.max_new_tokens, temp, args.top_k, args.top_p, device
-            )
-            svg_text = truncate_at_svg_close(svg_text)
+        # save the prefix alone for side-by-side comparison
+        prefix_svg_path = prefix_dir / f"{pfx['name']}_prefix_only.svg"
+        prefix_svg_path.write_text(pfx["svg"] + "</svg>", encoding="utf-8")
 
-            svg_path = prefix_dir / f"{label}.svg"
-            png_path = prefix_dir / f"{label}.png"
-            svg_path.write_text(svg_text, encoding="utf-8")
+        pfx_results, pfx_attempts = generate_until_renders(
+            model, tok, pfx["svg"],
+            n_target      = args.n_prefix,
+            max_new_tokens= args.max_new_tokens,
+            temperatures  = [0.8],
+            top_k         = args.top_k,
+            top_p         = args.top_p,
+            device        = device,
+            save_dir      = prefix_dir,
+            label_prefix  = pfx["name"],
+            no_render     = args.no_render,
+        )
 
-            # also save the prefix alone for side-by-side comparison
-            prefix_svg_path = prefix_dir / f"{pfx['name']}_prefix_only.svg"
-            prefix_svg_path.write_text(pfx["svg"] + "</svg>", encoding="utf-8")
-
-            rendered = False
-            if not args.no_render:
-                rendered = try_render(svg_text, png_path)
-                if not rendered:
-                    try_render_fallback(svg_text, png_path)
-            print(f"    → {'rendered' if rendered else 'render failed'}  ({len(svg_text)} chars)\n")
-
-            entry = {
-                "label":       label,
-                "name":        pfx["name"],
-                "description": pfx["desc"],
-                "prefix":      pfx["svg"],
-                "temperature": temp,
-                "svg_path":    str(svg_path),
-                "png_path":    str(png_path) if not args.no_render else None,
-                "rendered":    rendered,
-            }
+        for entry in pfx_results:
+            entry["name"]        = pfx["name"]
+            entry["description"] = pfx["desc"]
+            entry["prefix"]      = pfx["svg"]
             all_results["prefix_conditioned"].append(entry)
-            pfx_png_paths.append(str(png_path))
+            pfx_png_paths.append(entry["png_path"])
             pfx_titles.append(pfx["name"].replace("_", "\n"))
+
+        got = len(pfx_results)
+        print(f"  → {got}/{args.n_prefix} rendered in {pfx_attempts} attempts")
 
     # ── 3. grids ──────────────────────────────────────────────────────────────
     if not args.no_render:
         print("\nBuilding grids...")
-        make_grid(unc_png_paths, unc_titles,
-                  out_dir / "grid_unconditional.png", cols=args.grid_cols)
-        make_grid(pfx_png_paths, pfx_titles,
-                  out_dir / "grid_prefix.png", cols=len(PREFIX_SAMPLES))
+        unc_png  = [e["png_path"] for e in unc_results]
+        unc_lbls = [f"T={e['temperature']}" for e in unc_results]
+        make_grid(unc_png, unc_lbls, out_dir / "grid_unconditional.png", cols=args.grid_cols)
+        make_grid(pfx_png_paths, pfx_titles, out_dir / "grid_prefix.png", cols=len(PREFIX_SAMPLES))
 
     # ── 4. save manifest ─────────────────────────────────────────────────────
     manifest_path = out_dir / "generation_manifest.json"
