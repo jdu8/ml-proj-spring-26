@@ -17,29 +17,44 @@ from torch.nn import functional as F
 class CausalSelfAttention(nn.Module):
     def __init__(self, cfg):
         super().__init__()
-        self.n_head = cfg['n_head']
-        self.n_embd = cfg['n_embd']
-        self.c_attn = nn.Linear(cfg['n_embd'], 3 * cfg['n_embd'])
-        self.c_proj = nn.Linear(cfg['n_embd'], cfg['n_embd'])
-        self.drop   = nn.Dropout(cfg['dropout'])
-        self.register_buffer(
-            'bias',
-            torch.tril(torch.ones(cfg['block_size'], cfg['block_size']))
-                  .view(1, 1, cfg['block_size'], cfg['block_size'])
-        )
+        self.n_head  = cfg['n_head']
+        self.n_embd  = cfg['n_embd']
+        self.dropout = cfg['dropout']
+        self.c_attn  = nn.Linear(cfg['n_embd'], 3 * cfg['n_embd'])
+        self.c_proj  = nn.Linear(cfg['n_embd'], cfg['n_embd'])
+        self.drop    = nn.Dropout(cfg['dropout'])
+        self.flash   = hasattr(F, 'scaled_dot_product_attention')
+        if not self.flash:
+            self.register_buffer(
+                'bias',
+                torch.tril(torch.ones(cfg['block_size'], cfg['block_size']))
+                      .view(1, 1, cfg['block_size'], cfg['block_size'])
+            )
 
     def forward(self, x):
         B, T, C = x.size()
         q, k, v = self.c_attn(x).split(self.n_embd, dim=2)
-        k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
-        q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
-        v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)
-        # µP change: scale by 1/d_head instead of 1/sqrt(d_head)
-        att = (q @ k.transpose(-2, -1)) * (1.0 / k.size(-1))
-        att = att.masked_fill(self.bias[:, :, :T, :T] == 0, float('-inf'))
-        att = F.softmax(att, dim=-1)
-        att = self.drop(att)
-        y = (att @ v).transpose(1, 2).contiguous().view(B, T, C)
+        d_head = C // self.n_head
+        k = k.view(B, T, self.n_head, d_head).transpose(1, 2)
+        q = q.view(B, T, self.n_head, d_head).transpose(1, 2)
+        v = v.view(B, T, self.n_head, d_head).transpose(1, 2)
+        if self.flash:
+            # µP change: scale=1/d_head instead of default 1/sqrt(d_head)
+            y = F.scaled_dot_product_attention(
+                q, k, v,
+                attn_mask=None,
+                dropout_p=self.dropout if self.training else 0.0,
+                is_causal=True,
+                scale=1.0 / d_head,
+            )
+        else:
+            # µP change: scale by 1/d_head instead of 1/sqrt(d_head)
+            att = (q @ k.transpose(-2, -1)) * (1.0 / d_head)
+            att = att.masked_fill(self.bias[:, :, :T, :T] == 0, float('-inf'))
+            att = F.softmax(att, dim=-1)
+            att = self.drop(att)
+            y = att @ v
+        y = y.transpose(1, 2).contiguous().view(B, T, C)
         return self.c_proj(y)
 
 

@@ -89,7 +89,7 @@ def parse_args():
     p.add_argument("--beta2",         type=float, default=0.95)
     p.add_argument("--dropout",       type=float, default=0.0)
     p.add_argument("--warmup_ratio",  type=float, default=0.05)
-    p.add_argument("--eval_interval", type=int,   default=500)
+    p.add_argument("--eval_interval", type=int,   default=50)
     p.add_argument("--eval_batches",  type=int,   default=50)
     p.add_argument("--out_dir",       default="out/tiny")
     p.add_argument("--data_dir",      default="../part2/data")
